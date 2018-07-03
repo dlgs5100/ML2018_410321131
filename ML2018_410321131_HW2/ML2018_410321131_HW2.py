@@ -3,8 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import fetch_mldata
 from sklearn import ensemble, svm, metrics
-from mlxtend.plotting import plot_decision_regions
-from matplotlib.colors import ListedColormap
 
 def fetch_data():
     # Fetching dataset
@@ -52,7 +50,7 @@ def RandomForest_model(X_train, y_train, X_test, y_test):
 def SVM_model(X_train, y_train, X_test, y_test):
     time_start = time.time()
     # SVM model
-    svc = svm.SVC()
+    svc = svm.SVC(gamma = 0.001)
     svc_fit = svc.fit(X_train, y_train)
 
     # Predict
