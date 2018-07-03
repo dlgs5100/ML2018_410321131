@@ -1,7 +1,10 @@
+import time
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import fetch_mldata
 from sklearn import ensemble, svm, metrics
+from mlxtend.plotting import plot_decision_regions
+from matplotlib.colors import ListedColormap
 
 def fetch_data():
     # Fetching dataset
@@ -28,6 +31,7 @@ def fetch_data():
     return X_train, y_train, X_test, y_test 
 
 def RandomForest_model(X_train, y_train, X_test, y_test):
+    time_start = time.time()
     # RandomForest model
     forest = ensemble.RandomForestClassifier(n_estimators = 100)
     forest_fit = forest.fit(X_train, y_train)
@@ -35,14 +39,18 @@ def RandomForest_model(X_train, y_train, X_test, y_test):
     # Predict
     y_test_predict = forest.predict(X_test)
 
-    # Accuracy and AUC
+    time_end = time.time()
+    # Training time, Accuracy, AUC, PR, F1
+    print("RandomForest model training time:",format(time_end-time_start),"sec")
     accuracy = metrics.accuracy_score(y_test, y_test_predict)
     print("RandomForest model accuracy:",accuracy)
     fpr, tpr, thresholds = metrics.roc_curve(y_test, y_test_predict, pos_label=2)
     auc = metrics.auc(fpr, tpr, reorder=False)
     print("RandomForest model AUC:",auc)
+    print("Report for RandomForest model: \n%s" % (metrics.classification_report(y_test, y_test_predict)))
 
 def SVM_model(X_train, y_train, X_test, y_test):
+    time_start = time.time()
     # SVM model
     svc = svm.SVC()
     svc_fit = svc.fit(X_train, y_train)
@@ -50,12 +58,15 @@ def SVM_model(X_train, y_train, X_test, y_test):
     # Predict
     y_test_predict = svc.predict(X_test)
 
-    # Accuracy and AUC
+    time_end = time.time()
+    # Training time, Accuracy, AUC, PR, F1
+    print("SVM model training time:",format(time_end-time_start),"sec")
     accuracy = metrics.accuracy_score(y_test, y_test_predict)
     print("SVM model accuracy:",accuracy)
     fpr, tpr, thresholds = metrics.roc_curve(y_test, y_test_predict, pos_label=2)
     auc = metrics.auc(fpr, tpr, reorder=False)
     print("SVM model AUC:",auc)
+    print("Report for SVM model: \n%s" % (metrics.classification_report(y_test, y_test_predict)))
 
 def main():
 
